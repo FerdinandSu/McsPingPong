@@ -50,7 +50,6 @@ app.MapPost("/ping", async (
 
 app.MapPost("/batch", async (
     [FromBody] BatchRequest request,
-    [FromServices] HttpClient http,
     [FromServices] IConfiguration config,
     HttpContext context) =>
 {
@@ -63,7 +62,7 @@ app.MapPost("/batch", async (
     for (int i = 0; i < request.BatchSize; i++)
     {
         var start = DateTime.Now;
-        var response = await http.PostAsJsonAsync(appUrl, ping);
+        var response = await new HttpClient().PostAsJsonAsync(appUrl, ping);
         var end = DateTime.Now;
         var pong = await response.Content.ReadFromJsonAsync<PongMessage>();
         bag.Add(new(pong!.ThisNode, (long)((end - start).TotalMilliseconds)));
