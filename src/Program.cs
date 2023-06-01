@@ -1,8 +1,8 @@
 
 using Microsoft.AspNetCore.Mvc;
 using Steeltoe.Extensions.Configuration.Placeholder;
-using System.Collections.Concurrent;
-
+using System.Net;
+ServicePointManager.DnsRefreshTimeout = 0; // Force DNS Refresh
 var builder = WebApplication.CreateBuilder(args);
 
 
