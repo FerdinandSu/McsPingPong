@@ -1,7 +1,7 @@
-IMAGE_NAME = cluster-service
-IMAGE_TAG = 0.1.1
-DOCKERFILE_DIR = .
-WORK_DIR = .
+IMAGE_NAME = mcs-ping-pong
+IMAGE_TAG = 0.2
+DOCKERFILE_DIR = src
+WORK_DIR = src
 REPO_NAME = 192.168.1.104:5000/cloud-collaboration-platform
 APP_NAME ?= $(IMAGE_NAME)
 SH_APP_NAME = $(APP_NAME)_sh

@@ -35,7 +35,7 @@ app.MapGet
             var appUrl = config["AppUrl"];
             var insId = config["InstanceId"] ?? "<Id-Not-Set>";
             var localIp = context.Connection.LocalIpAddress?.ToString() ?? "<UNKNOWN>";
-            var thisNode = new NodeInfo(insId, localIp);
+            var thisNode = new NodeInfo(insId, localIp, Dns.GetHostName());
             NodeInfo[]? result;
             if (ttl == 1)
             {
@@ -56,4 +56,4 @@ app.MapGet
 
 app.Run();
 
-public record NodeInfo(string Id, string Ip);
+public record NodeInfo(string Id, string Ip, string Hostname);
