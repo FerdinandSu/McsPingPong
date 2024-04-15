@@ -6,10 +6,10 @@ EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
-COPY ["src/McsPingPong.csproj", "src/"]
+COPY ["src/McsPingPong.csproj", "."]
 RUN dotnet restore "src/McsPingPong.csproj"
-COPY . .
-WORKDIR "/src/src"
+COPY src/* .
+WORKDIR "/src"
 RUN dotnet build "McsPingPong.csproj" -c Release -o /app/build
 
 FROM build AS publish
