@@ -1,10 +1,10 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: mcs-ping-pong
+  name: mcs-ping-pong-master
   namespace: istio-test
   labels:
-    app: mcs-ping-pong
+    app: mcs-ping-pong-master
   annotations:
     kubesphere.io/creator: ferdinandsu
 spec:
@@ -14,7 +14,7 @@ spec:
       port: 80
       targetPort: 80
   selector:
-    app: mcs-ping-pong
+    app: mcs-ping-pong-master
   clusterIP: None
   type: ClusterIP
   sessionAffinity: None
@@ -22,55 +22,41 @@ spec:
 kind: Deployment
 apiVersion: apps/v1
 metadata:
-  name: mcs-ping-pong
+  name: mcs-ping-pong-master
   namespace: istio-test
   labels:
-    app: mcs-ping-pong
+    app: mcs-ping-pong-master
   annotations:
-    deployment.kubernetes.io/revision: '3'
+    deployment.kubernetes.io/revision: "3"
     kubesphere.io/creator: ferdinandsu
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
-      app: mcs-ping-pong
+      app: mcs-ping-pong-master
   template:
     metadata:
       creationTimestamp: null
       labels:
-        app: mcs-ping-pong
+        app: mcs-ping-pong-master
       annotations:
         kubesphere.io/creator: ferdinandsu
-        kubesphere.io/imagepullsecrets: '{}'
-        kubesphere.io/restartedAt: '2023-05-16T05:58:26.874Z'
+        kubesphere.io/imagepullsecrets: "{}"
+        kubesphere.io/restartedAt: "2023-05-16T05:58:26.874Z"
     spec:
       containers:
         - name: mcs-ping-pong
-          image: '192.168.1.102:5000/mss-modified/mcspingpong:swagger'
+          image: "192.168.1.104:5000/cloud-collaboration-platform/mcs-ping-pong:0.2"
           ports:
             - name: tcp-80
               containerPort: 80
               protocol: TCP
           env:
             - name: APP_URL
-              value: 'http://mcs-ping-pong/ping'
+              value: "http://mcs-ping-pong-master/"
             - name: INSTANCE_ID
-              value: '119'
+              value: "master"
           resources: {}
-          terminationMessagePath: /dev/termination-log
-          terminationMessagePolicy: File
           imagePullPolicy: IfNotPresent
       restartPolicy: Always
-      terminationGracePeriodSeconds: 30
       dnsPolicy: ClusterFirst
-      serviceAccountName: default
-      serviceAccount: default
-      securityContext: {}
-      schedulerName: default-scheduler
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxUnavailable: 25%
-      maxSurge: 25%
-  revisionHistoryLimit: 10
-  progressDeadlineSeconds: 600

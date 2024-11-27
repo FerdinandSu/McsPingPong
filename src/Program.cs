@@ -12,6 +12,7 @@ builder.Configuration.AddPlaceholderResolver();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHttpClient();
+builder.Services.AddLogging();
 
 var app = builder.Build();
 
@@ -28,6 +29,7 @@ app.MapGet
             [FromQuery] int ttl,
             [FromServices] HttpClient http,
             [FromServices] IConfiguration config,
+            [FromServices] ILogger<Program> logger,
             HttpContext context
         ) =>
         {
@@ -43,7 +45,9 @@ app.MapGet
             }
             else
             {
-                var response = await http.GetFromJsonAsync<NodeInfo[]?>($"{appUrl}?ttl={ttl - 1}");
+                var target=$"{appUrl}?ttl={ttl - 1}";
+                logger.LogInformation($"Requsting: {target}");
+                var response = await http.GetFromJsonAsync<NodeInfo[]?>(target);
                 result = response is null ? null : [thisNode, .. response];
             }
 
